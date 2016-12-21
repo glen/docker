@@ -1,0 +1,22 @@
+version: '2'
+services:
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=p@ssw0rd
+      - MYSQLDATABASE=etouch_dashboard
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - ./src/db/Dump20151202.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+  web:
+    build: .
+    command: "cd /srv/eTAAP-Dashboard && ant build && ant deploy && catalina.sh run" 
+    volumes:
+      - .:/srv/eTAAP-Dashboard
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
