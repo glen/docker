@@ -4,7 +4,7 @@ MAINTAINER Glen for eTAAP
 
 # yum update 
 RUN yum -y update && yum install -y \
-	wget
+				wget
 
 ENV JDK_VERSION 7u79
 ENV JDK_DOWNLOAD_URL "http://download.oracle.com/otn-pub/java/jdk/$JDK_VERSION-b15/jdk-$JDK_VERSION-linux-x64.tar.gz"
@@ -17,11 +17,6 @@ ENV TOMCAT_DOWNLOAD_URL http://redrockdigimark.com/apachemirror/tomcat/tomcat-7/
 # Tomcat installation
 RUN cd /tmp && wget $TOMCAT_DOWNLOAD_URL && tar xzf apache-tomcat-$TOMCAT_VERSION.tar.gz && mv apache-tomcat-$TOMCAT_VERSION /usr/local/ && export TOMCAT_HOME=/usr/local/apache-tomcat-$TOMCAT_VERSION
 
-ENV MAVEN_VERSION 3.3.9
-ENV MAVEN_DOWNLOAD_URL http://www-eu.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz
-# Maven installation
-RUN cd /tmp && wget $MAVEN_DOWNLOAD_URL && tar xzf apache-maven-$MAVEN_VERSION-bin.tar.gz && mv apache-maven-$MAVEN_VERSION /usr/local/ 
-
 ENV JAVA_HOME /usr/local/jdk1.7.0_79
 ENV TOMCAT_HOME /usr/local/apache-tomcat-$TOMCAT_VERSION
 ENV M2_HOME /usr/local/apache-maven-$MAVEN_VERSION
@@ -32,14 +27,15 @@ ENV ANT_DOWNLOAD_URL http://redrockdigimark.com/apachemirror/ant/binaries/apache
 RUN wget $ANT_DOWNLOAD_URL && tar xzf apache-ant-$ANT_VERSION-bin.tar.gz && mv apache-ant-$ANT_VERSION /usr/local/
 
 ENV ANT_HOME /usr/local/apache-$ANT_VERSION
-ENV PATH $PATH:$JAVA_HOME/bin/:$TOMCAT_HOME/bin/:$M2_HOME/bin:/usr/local/apache-ant-$ANT_VERSION/bin/
+ENV PATH $PATH:$JAVA_HOME/bin/:$TOMCAT_HOME/bin/:/usr/local/apache-ant-$ANT_VERSION/bin/
+
+RUN yum install -y mysql
+RUN mkdir $TOMCAT_HOME/webapps/etaap/
+WORKDIR $TOMCAT_HOME/webapps/etaap/
+ADD . $TOMCAT_HOME/webapps/etaap/
 
 EXPOSE 8080
 
 LABEL name="eTAAP CentOS" vendor="eTouch" license="GPLv2" build-date="20161130"
-
-RUN mkdir $TOMCAT_HOME/webapps/eTAAP-Dashboard/
-
-ADD . /srv/eTAAP-Dashboard
 
 CMD ["catalina.sh", "run"]
