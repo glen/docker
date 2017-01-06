@@ -21,7 +21,7 @@ ENV JAVA_HOME /usr/local/jdk1.7.0_79
 ENV TOMCAT_HOME /usr/local/apache-tomcat-$TOMCAT_VERSION
 ENV M2_HOME /usr/local/apache-maven-$MAVEN_VERSION
 
-ENV ANT_VERSION 1.9.7
+ENV ANT_VERSION 1.9.8
 ENV ANT_DOWNLOAD_URL http://redrockdigimark.com/apachemirror/ant/binaries/apache-ant-$ANT_VERSION-bin.tar.gz
 
 RUN wget $ANT_DOWNLOAD_URL && tar xzf apache-ant-$ANT_VERSION-bin.tar.gz && mv apache-ant-$ANT_VERSION /usr/local/
